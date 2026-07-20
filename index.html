@@ -1,81 +1,1200 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JAnalytics - Home</title>
-    <link rel="stylesheet" href="/JAnalytics/css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAnalitics: analítica de datos</title>
+<meta name="description" content="JAnalitics ayuda a pequeñas y medianas empresas a automatizar procesos, construir dashboards y tomar decisiones con datos confiables.">
+
+<!-- Favicon: inline SVG mark, no extra file needed -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230A0E0B'/%3E%3Ctext x='14' y='45' font-family='monospace' font-weight='700' font-size='34' fill='%235EDB64'%3EJ%3C/text%3E%3Ctext x='34' y='45' font-family='monospace' font-weight='700' font-size='34' fill='%235EDBA3'%3E%CE%BB%3C/text%3E%3C/svg%3E">
+
+<!-- Fonts: Space Grotesk (display/body) + JetBrains Mono (data / ascii accents) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Phosphor Icons (CDN, icon font - no hand-rolled SVG icons) -->
+<script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#0A0E0B;
+    --bg-soft:#0D1310;
+    --surface:#121913;
+    --surface-2:#182018;
+    --border:#243026;
+    --border-soft:#1B241D;
+    --text:#ECF3EE;
+    --text-muted:#93A599;
+    --text-dim:#5B6C60;
+    --primary:#5EDB64;
+    --secondary:#5EDBA3;
+    --primary-rgb:94,219,100;
+    --secondary-rgb:94,219,163;
+    --on-accent:#08120A;
+    --font-display:'Space Grotesk', system-ui, -apple-system, sans-serif;
+    --font-mono:'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+    --ease:cubic-bezier(.16,1,.3,1);
+    --container:1200px;
+    --nav-h:72px;
+    --r-card:20px;
+    --r-input:10px;
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    html{ scroll-behavior:smooth; }
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ background:var(--bg); }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-display);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  img,svg{ display:block; max-width:100%; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  ul{ list-style:none; }
+
+  button{ font-family:inherit; cursor:pointer; }
+
+  .container{
+    width:100%;
+    max-width:var(--container);
+    margin-inline:auto;
+    padding-inline:24px;
+  }
+
+  section{ position:relative; }
+
+  /* Ambient dot-grid texture: subtle, brand-appropriate, not a purple mesh blob */
+  .grid-texture{
+    position:absolute;
+    inset:0;
+    background-image:radial-gradient(rgba(var(--primary-rgb),0.10) 1px, transparent 1px);
+    background-size:28px 28px;
+    mask-image:radial-gradient(ellipse 70% 60% at 50% 0%, black 40%, transparent 100%);
+    pointer-events:none;
+  }
+
+  /* ============ FOCUS / A11Y ============ */
+  :focus-visible{
+    outline:2px solid var(--secondary);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  .skip-link{
+    position:absolute;
+    left:24px;
+    top:-60px;
+    background:var(--primary);
+    color:var(--on-accent);
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:14px;
+    z-index:1000;
+    transition:top .25s var(--ease);
+  }
+  .skip-link:focus{ top:16px; }
+
+  .visually-hidden{
+    position:absolute;
+    width:1px; height:1px;
+    overflow:hidden;
+    clip:rect(0 0 0 0);
+    white-space:nowrap;
+  }
+
+  /* ============ TYPE HELPERS ============ */
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--secondary);
+    font-weight:600;
+    margin-bottom:14px;
+    display:inline-block;
+  }
+
+  h1,h2,h3{
+    font-family:var(--font-display);
+    font-weight:600;
+    letter-spacing:-0.02em;
+    line-height:1.1;
+  }
+
+  .section-head{
+    max-width:640px;
+    margin-bottom:48px;
+  }
+  .section-head h2{
+    font-size:clamp(28px,4vw,40px);
+    margin-bottom:14px;
+  }
+  .section-head p{
+    color:var(--text-muted);
+    font-size:16.5px;
+    max-width:52ch;
+  }
+
+  .grad-text{
+    background:linear-gradient(100deg, var(--primary), var(--secondary));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:13px 26px;
+    border-radius:999px;
+    font-size:15px;
+    font-weight:600;
+    white-space:nowrap;
+    border:1px solid transparent;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .3s var(--ease), background .3s var(--ease);
+  }
+  .btn:active{ transform:scale(.97); }
+
+  .btn-primary{
+    background:linear-gradient(100deg, var(--primary), var(--secondary));
+    color:var(--on-accent);
+  }
+  .btn-primary:hover{
+    box-shadow:0 0 0 1px rgba(var(--primary-rgb),.4), 0 10px 30px -8px rgba(var(--primary-rgb),.55);
+    transform:translateY(-2px);
+  }
+
+  .btn-outline{
+    background:transparent;
+    color:var(--text);
+    border-color:var(--border);
+  }
+  .btn-outline:hover{
+    border-color:var(--secondary);
+    color:var(--secondary);
+    transform:translateY(-2px);
+  }
+
+  .btn-sm{ padding:10px 20px; font-size:14px; }
+
+  /* ============ NAV ============ */
+  .nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    height:var(--nav-h);
+    z-index:500;
+    display:flex;
+    align-items:center;
+    border-bottom:1px solid transparent;
+    transition:background .4s var(--ease), border-color .4s var(--ease), backdrop-filter .4s var(--ease);
+  }
+  .nav.is-scrolled{
+    background:rgba(10,14,11,.78);
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    border-bottom-color:var(--border-soft);
+  }
+
+  .nav-inner{
+    width:100%;
+    max-width:var(--container);
+    margin-inline:auto;
+    padding-inline:24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-family:var(--font-mono);
+    font-weight:700;
+    font-size:19px;
+    letter-spacing:-0.01em;
+  }
+  .brand-mark{
+    color:var(--primary);
+  }
+  .brand-mark .lam{ color:var(--secondary); }
+  .brand-word{ color:var(--text); font-family:var(--font-display); font-weight:600; }
+
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap:36px;
+  }
+  .nav-links a{
+    font-size:14.5px;
+    color:var(--text-muted);
+    transition:color .25s var(--ease);
+    position:relative;
+  }
+  .nav-links a:hover{ color:var(--text); }
+
+  .nav-actions{ display:flex; align-items:center; gap:18px; }
+
+  .nav-toggle{
+    display:none;
+    background:none;
+    border:none;
+    color:var(--text);
+    font-size:26px;
+    line-height:0;
+  }
+
+  .nav-mobile{
+    position:fixed;
+    top:var(--nav-h);
+    left:0; right:0;
+    background:rgba(10,14,11,.98);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border-soft);
+    padding:20px 24px 28px;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    transform:translateY(-12px);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s var(--ease), transform .3s var(--ease);
+    z-index:499;
+  }
+  .nav-mobile.is-open{
+    transform:translateY(0);
+    opacity:1;
+    pointer-events:auto;
+  }
+  .nav-mobile a{
+    padding:14px 4px;
+    border-bottom:1px solid var(--border-soft);
+    color:var(--text);
+    font-size:16px;
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    padding-top:calc(var(--nav-h) + 64px);
+    padding-bottom:88px;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:56px;
+    align-items:center;
+  }
+
+  .hero-copy h1{
+    font-size:clamp(34px,4.6vw,54px);
+    margin-bottom:20px;
+  }
+  .hero-copy p{
+    color:var(--text-muted);
+    font-size:17.5px;
+    max-width:46ch;
+    margin-bottom:34px;
+  }
+  .hero-ctas{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+
+  /* ---- Hero ascii-mark panel ---- */
+  .hero-mark{
+    position:relative;
+    aspect-ratio:1/0.92;
+    border:1px solid var(--border);
+    border-radius:var(--r-card);
+    background:
+      repeating-linear-gradient(180deg, rgba(255,255,255,.012) 0px, rgba(255,255,255,.012) 1px, transparent 1px, transparent 3px),
+      radial-gradient(ellipse 90% 80% at 50% 30%, rgba(var(--primary-rgb),.10), transparent 65%),
+      var(--surface);
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .mark-field{
+    position:absolute;
+    inset:0;
+    display:grid;
+    font-family:var(--font-mono);
+    color:var(--text-dim);
+    font-size:13px;
+    line-height:1.9;
+    letter-spacing:.15em;
+    text-align:center;
+    opacity:.55;
+    user-select:none;
+  }
+  .mark-field span{ opacity:.6; }
+
+  .mark-glyphs{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:.05em;
+    font-family:var(--font-mono);
+    font-weight:700;
+    font-size:clamp(96px,13vw,168px);
+    line-height:1;
+  }
+  .glyph{
+    display:inline-block;
+    min-width:.65em;
+    text-align:center;
+    color:var(--primary);
+    text-shadow:0 0 40px rgba(var(--primary-rgb),.35);
+  }
+  .glyph-lambda{ color:var(--secondary); text-shadow:0 0 40px rgba(var(--secondary-rgb),.35); }
+
+  .mark-caption{
+    position:absolute;
+    bottom:18px;
+    left:0; right:0;
+    text-align:center;
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+  }
+
+  /* ============ ABOUT ============ */
+  .about{ padding-block:104px; }
+  .about-grid{
+    display:grid;
+    grid-template-columns:1fr .82fr;
+    gap:64px;
+    align-items:start;
+  }
+  .about-copy h2{
+    font-size:clamp(26px,3.6vw,36px);
+    max-width:16ch;
+    margin-bottom:28px;
+  }
+  .about-block{ margin-bottom:26px; }
+  .about-block:last-child{ margin-bottom:0; }
+  .about-block h3{
+    font-family:var(--font-mono);
+    font-size:13px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--secondary);
+    margin-bottom:10px;
+    font-weight:600;
+  }
+  .about-block p{ color:var(--text-muted); max-width:50ch; }
+
+  .about-visual{
+    border:1px solid var(--border);
+    border-radius:var(--r-card);
+    background:var(--surface);
+    padding:32px 26px;
+  }
+  .about-visual svg{ width:100%; height:auto; }
+  .about-visual-caption{
+    margin-top:18px;
+    font-size:13.5px;
+    color:var(--text-muted);
+    text-align:center;
+  }
+
+  /* ============ SERVICIOS (bento) ============ */
+  .services{ padding-block:104px; background:var(--bg-soft); border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); }
+
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:20px;
+  }
+
+  .s-card{
+    border:1px solid var(--border);
+    border-radius:var(--r-card);
+    padding:32px;
+    background:var(--surface);
+    transition:transform .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
+  }
+  .s-card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(var(--primary-rgb),.45);
+  }
+  .s-card--accent{
+    background:linear-gradient(155deg, rgba(var(--primary-rgb),.09), rgba(var(--secondary-rgb),.03) 60%, var(--surface) 100%);
+  }
+
+  .s-icon{
+    width:48px; height:48px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:12px;
+    background:rgba(var(--primary-rgb),.12);
+    color:var(--primary);
+    font-size:22px;
+    margin-bottom:22px;
+  }
+  .s-card h3{ font-size:20px; margin-bottom:10px; }
+  .s-card p{ color:var(--text-muted); font-size:15px; margin-bottom:18px; }
+
+  .s-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .s-tag{
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    padding:5px 12px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    color:var(--text-muted);
+  }
+
+  /* ============ STACK ============ */
+  .stack{ padding-block:104px; }
+  .stack-groups{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:36px;
+  }
+  .stack-group h3{
+    font-size:15px;
+    color:var(--text);
+    margin-bottom:16px;
+    font-weight:600;
+  }
+  .stack-chips{ display:flex; flex-wrap:wrap; gap:10px; }
+  .chip{
+    font-family:var(--font-mono);
+    font-size:13.5px;
+    padding:9px 16px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--text-muted);
+    transition:border-color .3s var(--ease), color .3s var(--ease), transform .3s var(--ease);
+  }
+  .chip:hover{
+    border-color:var(--secondary);
+    color:var(--text);
+    transform:translateY(-2px);
+  }
+
+  /* ============ PROCESO ============ */
+  .process{ padding-block:104px; background:var(--bg-soft); border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); }
+
+  .process-track{
+    position:relative;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:28px;
+  }
+  .process-line{
+    position:absolute;
+    top:23px;
+    left:0;
+    height:1px;
+    background:var(--border);
+    width:100%;
+  }
+  .process-line-fill{
+    position:absolute;
+    top:0; left:0;
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--primary), var(--secondary));
+    transition:width 1.4s var(--ease);
+  }
+
+  .p-step{ position:relative; }
+  .p-num{
+    width:46px; height:46px;
+    border-radius:50%;
+    border:1px solid var(--border);
+    background:var(--bg-soft);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono);
+    font-size:13px;
+    font-weight:700;
+    color:var(--primary);
+    margin-bottom:22px;
+    position:relative;
+    z-index:2;
+  }
+  .p-step h3{ font-size:18px; margin-bottom:8px; display:flex; align-items:center; gap:9px; }
+  .p-step h3 i{ color:var(--secondary); font-size:17px; }
+  .p-step p{ color:var(--text-muted); font-size:14.5px; }
+
+  /* ============ CONTACTO ============ */
+  .contact{ padding-block:104px; }
+  .contact-grid{
+    display:grid;
+    grid-template-columns:.95fr 1.05fr;
+    gap:64px;
+  }
+  .contact-info h2{
+    font-size:clamp(26px,3.6vw,36px);
+    margin-bottom:16px;
+  }
+  .contact-info > p{ color:var(--text-muted); max-width:40ch; margin-bottom:36px; }
+
+  .contact-links{ display:flex; flex-direction:column; gap:14px; }
+  .contact-link{
+    display:flex; align-items:center; gap:12px;
+    padding:14px 18px;
+    border:1px solid var(--border);
+    border-radius:var(--r-input);
+    background:var(--surface);
+    font-size:14.5px;
+    width:fit-content;
+    transition:border-color .3s var(--ease), transform .3s var(--ease);
+  }
+  .contact-link:hover{ border-color:var(--secondary); transform:translateX(3px); }
+  .contact-link i{ font-size:19px; color:var(--primary); }
+
+  .form-card{
+    border:1px solid var(--border);
+    border-radius:var(--r-card);
+    background:var(--surface);
+    padding:36px;
+  }
+  .field{ margin-bottom:20px; }
+  .field label{
+    display:block;
+    font-size:13.5px;
+    font-weight:600;
+    margin-bottom:8px;
+    color:var(--text);
+  }
+  .field input,
+  .field textarea{
+    width:100%;
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    border-radius:var(--r-input);
+    padding:13px 15px;
+    color:var(--text);
+    font-family:var(--font-display);
+    font-size:15px;
+    transition:border-color .25s var(--ease), background .25s var(--ease);
+  }
+  .field input::placeholder,
+  .field textarea::placeholder{ color:var(--text-muted); }
+  .field input:focus,
+  .field textarea:focus{
+    border-color:var(--secondary);
+    background:var(--surface-2);
+    outline:none;
+  }
+  .field textarea{ resize:vertical; min-height:120px; }
+  .field-help{ font-size:12.5px; color:var(--text-muted); margin-top:6px; }
+
+  .form-status{
+    font-size:13.5px;
+    margin-top:14px;
+    color:var(--secondary);
+    display:none;
+  }
+  .form-status.is-visible{ display:block; }
+
+  /* ============ FOOTER ============ */
+  .footer{
+    border-top:1px solid var(--border-soft);
+    padding-block:48px;
+  }
+  .footer-inner{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    flex-wrap:wrap;
+    gap:32px;
+  }
+  .footer-brand p{
+    color:var(--text-muted);
+    font-size:13.5px;
+    margin-top:10px;
+    max-width:34ch;
+  }
+  .footer-cols{ display:flex; gap:56px; flex-wrap:wrap; }
+  .footer-col h4{
+    font-size:13px;
+    color:var(--text-muted);
+    margin-bottom:14px;
+    font-weight:600;
+  }
+  .footer-col a{
+    display:block;
+    color:var(--text-muted);
+    font-size:14px;
+    padding-block:6px;
+    transition:color .25s var(--ease);
+  }
+  .footer-col a:hover{ color:var(--secondary); }
+  .footer-social{ display:flex; gap:12px; margin-top:14px; }
+  .footer-social a{
+    width:38px; height:38px;
+    border:1px solid var(--border);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text-muted);
+    font-size:17px;
+    transition:border-color .25s var(--ease), color .25s var(--ease);
+  }
+  .footer-social a:hover{ border-color:var(--secondary); color:var(--secondary); }
+
+  .footer-bottom{
+    margin-top:40px;
+    padding-top:24px;
+    border-top:1px solid var(--border-soft);
+    font-size:13px;
+    color:var(--text-muted);
+  }
+
+  /* ============ SCROLL REVEAL ============ */
+  [data-reveal]{
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity .7s var(--ease), transform .7s var(--ease);
+  }
+  [data-reveal].is-visible{ opacity:1; transform:translateY(0); }
+
+  /* ============ CUSTOM CURSOR (additive, desktop pointer:fine only) ============ */
+  .cursor-dot{
+    position:fixed;
+    top:0; left:0;
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--primary);
+    pointer-events:none;
+    z-index:9999;
+    transform:translate(-50%,-50%);
+    box-shadow:0 0 12px rgba(var(--primary-rgb),.7);
+    transition:opacity .3s ease;
+  }
+  .cursor-ring{
+    position:fixed;
+    top:0; left:0;
+    width:32px; height:32px;
+    border-radius:50%;
+    border:1px solid rgba(var(--secondary-rgb),.6);
+    pointer-events:none;
+    z-index:9998;
+    transform:translate(-50%,-50%);
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:1024px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-mark{ order:-1; max-width:460px; margin-inline:auto; }
+    .about-grid{ grid-template-columns:1fr; }
+    .about-visual{ order:-1; max-width:480px; }
+    .contact-grid{ grid-template-columns:1fr; }
+    .stack-groups{ grid-template-columns:1fr 1fr; }
+  }
+
+  @media (max-width:860px){
+    .nav-links,.nav-actions .btn{ display:none; }
+    .nav-toggle{ display:block; }
+    .services-grid{ grid-template-columns:1fr; }
+    .process-track{ grid-template-columns:1fr; gap:32px; }
+    .process-line{ display:none; }
+    .footer-inner{ flex-direction:column; }
+    .cursor-dot,.cursor-ring{ display:none; }
+  }
+
+  @media (max-width:560px){
+    .stack-groups{ grid-template-columns:1fr; }
+    .hero-ctas{ flex-direction:column; align-items:stretch; }
+    .hero-ctas .btn{ justify-content:center; }
+    .container{ padding-inline:20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+    .cursor-dot,.cursor-ring{ display:none; }
+  }
+</style>
 </head>
 <body>
 
-<header>
-    <div class="container clearfix">
-        <h1>J<span>Analytics</span></h1>
-        <nav>
-            <a href="index.html" class="active">Home</a>
-            <a href="portafolio.html">Portafolio</a>
-            <a href="publicaciones.html">Publicaciones</a>
-        </nav>
+<a href="#contenido" class="skip-link">Saltar al contenido</a>
+
+<!-- Custom cursor: subtle glow accent layered over the native cursor (disabled on touch + reduced motion) -->
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="siteNav">
+  <div class="nav-inner">
+    <a href="#top" class="brand" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+      <img src="images/LOGOTIPO.png" alt="JAnalitics Logo" style="height: 38px; width: auto; display: block;">
+    </a>
+
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="#sobre">Sobre</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#stack">Stack</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="#contacto" class="btn btn-primary btn-sm">Hablemos</a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMobile" aria-label="Abrir menú">
+        <i class="ph ph-list" id="navToggleIcon"></i>
+      </button>
     </div>
+  </div>
+
+  <nav class="nav-mobile" id="navMobile" aria-label="Navegación móvil">
+    <a href="#sobre">Sobre</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#stack">Stack</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
 </header>
 
-<section class="container">
-    <h2>Misión</h2>
-    <p style="font-size:1.1rem; margin-bottom:20px;">
-        En <strong>JAnalytics</strong> somos especialistas en <strong>analítica de datos</strong> para pequeñas y medianas empresas. 
-        Transformamos tus datos en decisiones estratégicas a través de flujos de trabajo automatizados y visualizaciones claras.
-    </p>
-    <div style="background:#e3f2fd; padding:20px; border-radius:8px; margin-bottom:30px;">
-        <p><strong>Nuestro enfoque:</strong> ayudamos a tu negocio a aprovechar el valor de sus datos, optimizando procesos y descubriendo oportunidades de crecimiento.</p>
-    </div>
+<main id="contenido">
 
-    <h3>Servicios clave</h3>
-    <div class="grid-3">
-        <div class="card">
-            <span class="servicio-icon">⚙️</span>
-            <h4>Power Query</h4>
-            <p>Extracción, transformación y carga de datos desde múltiples orígenes para tener información limpia y lista para analizar.</p>
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <h1>Transformando datos en <span class="grad-text">decisiones estratégicas</span>.</h1>
+        <p>Ayudamos a pequeñas y medianas empresas a ordenar sus datos, automatizar procesos y tomar decisiones con información confiable.</p>
+        <div class="hero-ctas">
+          <a href="#servicios" class="btn btn-primary">Descubre cómo <i class="ph ph-arrow-right"></i></a>
+          <a href="#contacto" class="btn btn-outline">Hablemos</a>
         </div>
-        <div class="card">
-            <span class="servicio-icon">🧩</span>
-            <h4>Knime &amp; n8n</h4>
-            <p>Creación de flujos de trabajo automatizados y orquestación de procesos de datos sin código, integrando aplicaciones y APIs.</p>
-        </div>
-        <div class="card">
-            <span class="servicio-icon">📊</span>
-            <h4>Tableros de Control</h4>
-            <p>Diseño e implementación de dashboards interactivos que muestran el rendimiento de tu negocio en tiempo real.</p>
-        </div>
-        <div class="card">
-            <span class="servicio-icon">💡</span>
-            <h4>Consultoría Estratégica</h4>
-            <p>Evaluación del estado de tus datos y asesoría para convertirlos en un activo valioso que impulse la toma de decisiones.</p>
-        </div>
-        <div class="card">
-            <span class="servicio-icon">📈</span>
-            <h4>Análisis Predictivo</h4>
-            <p>Modelos simples de machine learning para pronosticar tendencias y anticipar necesidades de tu negocio.</p>
-        </div>
-        <div class="card">
-            <span class="servicio-icon">🤝</span>
-            <h4>Acompañamiento Continuo</h4>
-            <p>Te apoyamos en la adopción de cultura data-driven, capacitando a tu equipo y resolviendo dudas a largo plazo.</p>
-        </div>
-    </div>
+      </div>
 
-    <h3>Proyectos destacados (próximamente)</h3>
-    <div class="proyecto-placeholder">
-        <i>📁</i>
-        <p>Espacio reservado para tus proyectos futuros.<br>Aquí mostrarás casos de éxito, estudios y soluciones implementadas.</p>
+      <div class="hero-mark" role="img" aria-label="Logotipo JAnalitics, la letra J junto al símbolo lambda">
+        <div class="mark-field" id="markField"></div>
+        <div class="mark-glyphs" aria-hidden="true">
+          <img src="images/ISOTIPO.png" alt="JAnalitics Isotype" style="width: 70%; height: auto; max-width: 200px; border-radius: 12px; object-fit: contain;">
+        </div>
+        <div class="mark-caption">JAnalitics // datos en movimiento</div>
+      </div>
     </div>
-</section>
+  </section>
 
-<footer>
+  <!-- ============ SOBRE ============ -->
+  <section class="about" id="sobre">
+    <div class="container about-grid">
+      <div class="about-copy" data-reveal>
+        <h2>Hacemos que los datos trabajen para tu negocio, no al revés.</h2>
+
+        <div class="about-block">
+          <h3>Misión</h3>
+          <p>Ayudamos a pymes a pasar de datos dispersos en hojas de cálculo y sistemas separados, a información clara que se puede usar todos los días.</p>
+        </div>
+
+        <div class="about-block">
+          <h3>Visión</h3>
+          <p>Ser el equipo de datos que las pymes contratan antes de necesitar contratar uno propio: cercano, técnico y sin complicaciones innecesarias.</p>
+        </div>
+      </div>
+
+      <div class="about-visual" data-reveal>
+        <svg viewBox="0 0 360 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- scattered source nodes -->
+          <g stroke="#26332A" stroke-width="1.5">
+            <line x1="34" y1="40" x2="180" y2="128"/>
+            <line x1="34" y1="128" x2="180" y2="128"/>
+            <line x1="34" y1="210" x2="180" y2="128"/>
+            <line x1="96" y1="20" x2="180" y2="128"/>
+            <line x1="96" y1="235" x2="180" y2="128"/>
+            <line x1="180" y1="128" x2="330" y2="128"/>
+          </g>
+          <g>
+            <circle cx="34" cy="40" r="5" fill="#5EDB64" opacity=".55"/>
+            <circle cx="34" cy="128" r="5" fill="#5EDB64" opacity=".55"/>
+            <circle cx="34" cy="210" r="5" fill="#5EDB64" opacity=".55"/>
+            <circle cx="96" cy="20" r="5" fill="#5EDBA3" opacity=".55"/>
+            <circle cx="96" cy="235" r="5" fill="#5EDBA3" opacity=".55"/>
+          </g>
+          <circle cx="180" cy="128" r="13" fill="#121913" stroke="#5EDB64" stroke-width="2"/>
+          <circle cx="330" cy="128" r="9" fill="#5EDBA3"/>
+          <text x="18" y="252" font-family="JetBrains Mono, monospace" font-size="11" fill="#5B6C60">fuentes dispersas</text>
+          <text x="272" y="150" font-family="JetBrains Mono, monospace" font-size="11" fill="#8FA396">decisión clara</text>
+        </svg>
+        <p class="about-visual-caption">De fuentes dispersas a un punto de decisión.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICIOS ============ -->
+  <section class="services" id="servicios">
     <div class="container">
-        &copy; 2026 JAnalytics · Hecho con ❤️ para PYMES · 
-        <a href="#">Aviso de privacidad</a>
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">Qué hacemos</span>
+        <h2>Cuatro formas de ordenar tus datos</h2>
+        <p>Cada servicio se adapta al tamaño de tu operación: empezamos por donde más duele y crecemos desde ahí.</p>
+      </div>
+
+      <div class="services-grid">
+        <article class="s-card s-card--accent" data-reveal>
+          <div class="s-icon"><i class="ph ph-arrows-clockwise"></i></div>
+          <h3>Automatización de flujos</h3>
+          <p>Conectamos y automatizamos procesos repetitivos para que tu equipo deje de mover datos a mano entre sistemas.</p>
+          <div class="s-tags">
+            <span class="s-tag">Power Query</span>
+            <span class="s-tag">KNIME</span>
+            <span class="s-tag">n8n</span>
+          </div>
+        </article>
+
+        <article class="s-card" data-reveal>
+          <div class="s-icon"><i class="ph ph-chart-bar"></i></div>
+          <h3>Tableros de control y dashboards</h3>
+          <p>Diseñamos dashboards que muestran lo que realmente importa, sin gráficos de más ni métricas que nadie revisa.</p>
+          <div class="s-tags">
+            <span class="s-tag">Power BI</span>
+            <span class="s-tag">Excel</span>
+          </div>
+        </article>
+
+        <article class="s-card" data-reveal>
+          <div class="s-icon"><i class="ph ph-shield-check"></i></div>
+          <h3>Consultoría en gobierno de datos</h3>
+          <p>Ponemos orden en cómo se guardan, nombran y comparten tus datos, para que cualquiera del equipo encuentre lo que necesita.</p>
+          <div class="s-tags">
+            <span class="s-tag">Estándares</span>
+            <span class="s-tag">Documentación</span>
+          </div>
+        </article>
+
+        <article class="s-card s-card--accent" data-reveal>
+          <div class="s-icon"><i class="ph ph-graduation-cap"></i></div>
+          <h3>Capacitación y acompañamiento</h3>
+          <p>Formamos a tu equipo en las herramientas que ya usan y los acompañamos hasta que ordenar datos deje de depender de nosotros.</p>
+          <div class="s-tags">
+            <span class="s-tag">Talleres</span>
+            <span class="s-tag">Mentoría</span>
+          </div>
+        </article>
+      </div>
     </div>
+  </section>
+
+  <!-- ============ STACK TECNOLÓGICO ============ -->
+  <section class="stack" id="stack">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <h2>Las herramientas con las que trabajamos</h2>
+        <p>Elegimos la herramienta según lo que tu equipo ya conoce, no al revés.</p>
+      </div>
+
+      <div class="stack-groups">
+        <div class="stack-group" data-reveal>
+          <h3>Automatización y ETL</h3>
+          <div class="stack-chips">
+            <span class="chip">Power Query</span>
+            <span class="chip">KNIME</span>
+            <span class="chip">n8n</span>
+          </div>
+        </div>
+        <div class="stack-group" data-reveal>
+          <h3>Visualización y reportes</h3>
+          <div class="stack-chips">
+            <span class="chip">Power BI</span>
+            <span class="chip">Excel</span>
+          </div>
+        </div>
+        <div class="stack-group" data-reveal>
+          <h3>Lenguaje y datos</h3>
+          <div class="stack-chips">
+            <span class="chip">Python</span>
+            <span class="chip">SQL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESO ============ -->
+  <section class="process" id="proceso">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">Cómo trabajamos</span>
+        <h2>De diagnóstico a resultados medibles</h2>
+        <p>Un proceso corto y directo, pensado para equipos que no tienen tiempo que perder.</p>
+      </div>
+
+      <div class="process-track" id="processTrack">
+        <div class="process-line"><div class="process-line-fill" id="processFill"></div></div>
+
+        <div class="p-step" data-reveal>
+          <div class="p-num">01</div>
+          <h3><i class="ph ph-magnifying-glass"></i>Diagnóstico</h3>
+          <p>Revisamos tus fuentes de datos actuales y los procesos manuales que más tiempo te quitan.</p>
+        </div>
+
+        <div class="p-step" data-reveal>
+          <div class="p-num">02</div>
+          <h3><i class="ph ph-pencil-simple-line"></i>Diseño</h3>
+          <p>Definimos la solución: qué automatizar, qué dashboard construir y con qué herramientas.</p>
+        </div>
+
+        <div class="p-step" data-reveal>
+          <div class="p-num">03</div>
+          <h3><i class="ph ph-wrench"></i>Implementación</h3>
+          <p>Construimos e integramos los flujos y tableros, probando siempre con tus datos reales.</p>
+        </div>
+
+        <div class="p-step" data-reveal>
+          <div class="p-num">04</div>
+          <h3><i class="ph ph-chart-line-up"></i>Seguimiento</h3>
+          <p>Acompañamos el uso, ajustamos lo necesario y capacitamos a tu equipo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACTO ============ -->
+  <section class="contact" id="contacto">
+    <div class="container contact-grid">
+      <div class="contact-info" data-reveal>
+        <h2>Hablemos de tus datos</h2>
+        <p>Cuéntanos qué necesitas ordenar y te respondemos en menos de dos días hábiles.</p>
+
+        <div class="contact-links">
+          <!-- TODO: reemplaza con tu perfil real de LinkedIn -->
+          <a class="contact-link" href="https://www.linkedin.com/company/janalitics" target="_blank" rel="noopener">
+            <i class="ph ph-linkedin-logo"></i> LinkedIn
+          </a>
+          <!-- TODO: reemplaza con tu correo real -->
+          <a class="contact-link" href="mailto:hola@janalitics.com">
+            <i class="ph ph-envelope-simple"></i> hola@janalitics.com
+          </a>
+        </div>
+      </div>
+
+      <form class="form-card" id="contactForm" data-reveal>
+        <div class="field">
+          <label for="fName">Nombre</label>
+          <input type="text" id="fName" name="name" placeholder="Tu nombre" required>
+        </div>
+        <div class="field">
+          <label for="fEmail">Correo</label>
+          <input type="email" id="fEmail" name="email" placeholder="tucorreo@empresa.com" required>
+        </div>
+        <div class="field">
+          <label for="fMsg">Mensaje</label>
+          <textarea id="fMsg" name="message" placeholder="Cuéntanos qué te gustaría ordenar o automatizar" required></textarea>
+          <p class="field-help">Al enviar, se abrirá tu cliente de correo con el mensaje ya redactado.</p>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Enviar mensaje</button>
+        <p class="form-status" id="formStatus" role="status">Abriendo tu cliente de correo...</p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+    <a href="#top" class="brand" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+      <img src="images/LOGOTIPO.png" alt="JAnalitics Logo" style="height: 38px; width: auto; display: block;">
+    </a>
+      <p>Transformando datos en decisiones estratégicas para pequeñas y medianas empresas.</p>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/company/janalitics" target="_blank" rel="noopener" aria-label="LinkedIn de JAnalitics"><i class="ph ph-linkedin-logo"></i></a>
+        <a href="mailto:hola@janalitics.com" aria-label="Enviar correo a JAnalitics"><i class="ph ph-envelope-simple"></i></a>
+      </div>
+    </div>
+
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <a href="#sobre">Sobre</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#stack">Stack</a>
+        <a href="#proceso">Proceso</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <span id="footerYear">© 2026</span> JAnalitics. Todos los derechos reservados.
+  </div>
 </footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isFinePointer = window.matchMedia('(pointer: fine)').matches;
+
+  /* ---------- Footer year ---------- */
+  document.getElementById('footerYear').textContent = '© ' + new Date().getFullYear();
+
+  /* ---------- Mobile nav toggle ---------- */
+  var navToggle = document.getElementById('navToggle');
+  var navToggleIcon = document.getElementById('navToggleIcon');
+  var navMobile = document.getElementById('navMobile');
+
+  navToggle.addEventListener('click', function(){
+    var isOpen = navMobile.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    navToggleIcon.className = isOpen ? 'ph ph-x' : 'ph ph-list';
+  });
+
+  navMobile.querySelectorAll('a').forEach(function(link){
+    link.addEventListener('click', function(){
+      navMobile.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggleIcon.className = 'ph ph-list';
+    });
+  });
+
+  /* ---------- Nav background on scroll (IntersectionObserver, not a scroll listener) ---------- */
+  var nav = document.getElementById('siteNav');
+  var sentinel = document.createElement('div');
+  sentinel.style.position = 'absolute';
+  sentinel.style.top = '0';
+  sentinel.style.height = '1px';
+  sentinel.style.width = '1px';
+  document.body.prepend(sentinel);
+
+  new IntersectionObserver(function(entries){
+    nav.classList.toggle('is-scrolled', !entries[0].isIntersecting);
+  }, { threshold: 0 }).observe(sentinel);
+
+  /* ---------- Scroll reveal ---------- */
+  var revealItems = document.querySelectorAll('[data-reveal]');
+  if (reduceMotion) {
+    revealItems.forEach(function(el){ el.classList.add('is-visible'); });
+  } else {
+    var revealObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    revealItems.forEach(function(el){ revealObserver.observe(el); });
+  }
+
+  /* ---------- Process line fill ---------- */
+  var processTrack = document.getElementById('processTrack');
+  var processFill = document.getElementById('processFill');
+  if (processTrack && processFill){
+    new IntersectionObserver(function(entries){
+      if (entries[0].isIntersecting){
+        processFill.style.width = '100%';
+      }
+    }, { threshold: 0.35 }).observe(processTrack);
+  }
+
+  /* ---------- Hero ascii mark: ambient field + decode-in glyphs ---------- */
+  var markField = document.getElementById('markField');
+  var fieldChars = ['0','1','λ','+','-','.',':','*','/'];
+  var cols = 20, rows = 11;
+  markField.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+  var fieldSpans = [];
+  for (var i = 0; i < cols * rows; i++){
+    var span = document.createElement('span');
+    span.textContent = fieldChars[Math.floor(Math.random() * fieldChars.length)];
+    markField.appendChild(span);
+    fieldSpans.push(span);
+  }
+
+  if (!reduceMotion){
+    setInterval(function(){
+      var idx = Math.floor(Math.random() * fieldSpans.length);
+      fieldSpans[idx].textContent = fieldChars[Math.floor(Math.random() * fieldChars.length)];
+    }, 55);
+  }
+
+  function scrambleGlyph(el, finalChar, delay){
+    var pool = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789λ+-*#';
+    var ticks = 0;
+    var maxTicks = 14;
+    setTimeout(function(){
+      if (reduceMotion){ el.textContent = finalChar; return; }
+      var timer = setInterval(function(){
+        ticks++;
+        if (ticks >= maxTicks){
+          el.textContent = finalChar;
+          clearInterval(timer);
+        } else {
+          el.textContent = pool[Math.floor(Math.random() * pool.length)];
+        }
+      }, 45);
+    }, delay);
+  }
+
+  scrambleGlyph(document.getElementById('glyphJ'), 'J', 200);
+  scrambleGlyph(document.getElementById('glyphL'), 'λ', 650);
+
+  /* ---------- Custom cursor: additive glow, desktop pointer:fine only ---------- */
+  if (isFinePointer && !reduceMotion){
+    var dot = document.getElementById('cursorDot');
+    var ring = document.getElementById('cursorRing');
+    var ringX = 0, ringY = 0;
+
+    window.addEventListener('pointermove', function(e){
+      dot.style.left = e.clientX + 'px';
+      dot.style.top = e.clientY + 'px';
+      ringX = e.clientX;
+      ringY = e.clientY;
+    });
+
+    (function loop(){
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(loop);
+    })();
+  } else {
+    document.getElementById('cursorDot').style.display = 'none';
+    document.getElementById('cursorRing').style.display = 'none';
+  }
+
+  /* ---------- Contact form: mailto fallback (no backend on GitHub Pages) ---------- */
+  var form = document.getElementById('contactForm');
+  var status = document.getElementById('formStatus');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('fName').value.trim();
+    var email = document.getElementById('fEmail').value.trim();
+    var message = document.getElementById('fMsg').value.trim();
+
+    var subject = encodeURIComponent('Contacto desde JAnalitics.com - ' + name);
+    var body = encodeURIComponent(message + '\n\nCorreo de contacto: ' + email);
+    var mailto = 'mailto:hola@janalitics.com?subject=' + subject + '&body=' + body;
+
+    status.classList.add('is-visible');
+    window.location.href = mailto;
+  });
+
+})();
+</script>
 
 </body>
 </html>
